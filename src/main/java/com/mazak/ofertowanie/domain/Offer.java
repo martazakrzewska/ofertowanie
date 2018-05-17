@@ -5,13 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table (name = "offers")
+@Table (name = "offer")
 public class Offer {
 
     @Id
@@ -22,9 +21,9 @@ public class Offer {
     private String name;
     private Long time;
 
-    private List<Material> material;
-
-    private List<Tool> tools;
+//    private List<Material> material;
+//
+//    private List<Tool> tools;
 
 
 
