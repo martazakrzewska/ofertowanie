@@ -1,30 +1,27 @@
-package com.mazak.ofertowanie.domain;
+package com.mazak.ofertowanie.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table (name = "offer")
-public class Offer {
+@Table (name = "material")
+public class Material {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String customer;
+    @NotNull
     private String name;
-    private Long time;
-
-//    private List<Material> material;
-//
-//    private List<Tool> tools;
-
+    private double diameterX;
+    private double diameterY;
 
 
 

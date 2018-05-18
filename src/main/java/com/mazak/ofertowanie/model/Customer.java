@@ -1,4 +1,4 @@
-package com.mazak.ofertowanie.domain;
+package com.mazak.ofertowanie.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +13,15 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Data
 @Entity
-public class Tool {
+public class Customer {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
+    private Long nip;
+    private String adress;
+    private String phoneNumber;
+
 }
