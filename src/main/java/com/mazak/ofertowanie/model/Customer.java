@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,4 +22,13 @@ public class Customer {
     private String adress;
     private String phoneNumber;
 
+    @OneToMany (mappedBy = "customer",  fetch = FetchType.EAGER)
+    private List<Offer> offers;
+
+    public Customer(String name, Long nip, String adress, String phoneNumber) {
+        this.name = name;
+        this.nip = nip;
+        this.adress = adress;
+        this.phoneNumber = phoneNumber;
+    }
 }
