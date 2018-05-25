@@ -1,43 +1,52 @@
 package com.mazak.ofertowanie.controller;
 
+import com.mazak.ofertowanie.exception.CustomerExistsException;
 import com.mazak.ofertowanie.model.Customer;
-import com.mazak.ofertowanie.service.CustomerService;
+import com.mazak.ofertowanie.model.dto.CustomerDto;
+import com.mazak.ofertowanie.response.ResponseFactory;
+import com.mazak.ofertowanie.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/customer")
+@RequestMapping(path = "/customer/")
+@CrossOrigin
 public class CustomerController {
 
     @Autowired
-    private CustomerService customerService;
+    private ICustomerService customerService;
 
-    @PostMapping
-    @ResponseStatus (HttpStatus.CREATED)
-    public Customer create(@RequestBody Customer customer){
-        return customerService.create(customer);
+    @RequestMapping(path = "/add", method = RequestMethod.POST)
+    public ResponseEntity<Customer> create(@RequestBody CustomerDto customerDto) {
+        try {
+            Optional<Customer> customer = customerService.create(customerDto);
+
+            if (customer.isPresent()) {
+                return ResponseFactory.created(customer.get());
+            }
+        } catch (CustomerExistsException e) {
+            e.printStackTrace();
+        }
+        return ResponseFactory.badRequest();
     }
 
-    @GetMapping
-    @ResponseStatus (HttpStatus.OK)
-    public List<Customer> search(@RequestParam(value = "name", required = false, defaultValue = "") String name){
-        return customerService.search(name);
-    }
+    @RequestMapping(path = "/get/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Customer> get(@PathVariable(name = "id") Long id) {
+        Optional<Customer> customer = customerService.getCustomer(id);
 
-    @PutMapping
-    @ResponseStatus (HttpStatus.OK)
-    public Customer update (@RequestBody Customer customer, @PathVariable("id") Long id){
-        return customerService.update(customer);
+        if (customer.isPresent()) {
+            return ResponseFactory.ok(customer.get());
+        }
+        return ResponseFactory.badRequest();
     }
+    @RequestMapping(path = "/getAll", method = RequestMethod.GET)
+    public ResponseEntity<List<Customer>> getAll() {
+        List<Customer> customers = customerService.getAll();
 
-    @DeleteMapping
-    @ResponseStatus (HttpStatus.NO_CONTENT)
-    public String remove(@PathVariable("id") Long id){
-        customerService.remove(id);
-        return String.format("Customer with id %s was remove", id);
+        return ResponseFactory.ok(customers);
     }
-
 }
